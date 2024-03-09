@@ -5,7 +5,7 @@
 Note : the IP of the machine could be different for you !
 
 ## Challenge
-### Scan 
+### Enumeration 
 First, let's perform a scan of the machine with `nmap -vv -T 5 -sV -sC -oN nmap.txt 10.10.124.198` to see if any port is open.
 
 - `-vv` : Having minimum verbose mode
@@ -42,6 +42,94 @@ Port 80 is HTTP, which means a website is up at this port. Let's check if we can
 
 ### Website (Port 80)
 When we go at URL **10.10.124.198:80**, we arrive at this page :
+
+![Website](images/Pickle_rick.png)
+
+We seem to have nothing... A first thing to do in every website is then to check the source code.
+
+There seem to be a comment here that tell us an interesting information.
+
+<details>
+    <summary>Clue</summary>
+  
+```html
+  <!--
+
+    Note to self, remember username!
+
+    Username: R1ckRul3s
+
+  -->
+```
+
+</details>
+
+We keep it for later.
+
+Now, a good thing to do is enumerating the website to search for **hidden subdomains**. I will use Gobuster for that : `gobuster dir -u 10.10.124.198 -w directory-list-2.3-small.txt`.
+
+I recommand that you use [Seclists](https://github.com/danielmiessler/SecLists) to brute-force with Gobuster. In this case, I will use Discovery/Web-Content/directory-list-2.3-small.txt.
+
+The result is the following :
+```bash
+===============================================================
+Gobuster v3.6
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://10.10.124.198/
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                SecLists/Discovery/Web-Content/common.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.6
+[+] Timeout:                 10s
+===============================================================
+Starting gobuster in directory enumeration mode
+===============================================================
+/.htaccess            (Status: 403) [Size: 297]
+/.htpasswd            (Status: 403) [Size: 297]
+/.hta                 (Status: 403) [Size: 292]
+/assets               (Status: 301) [Size: 315] [--> http://10.10.124.198/assets/]
+/index.html           (Status: 200) [Size: 1062]
+/robots.txt           (Status: 200) [Size: 17]
+/server-status        (Status: 403) [Size: 301]
+Progress: 4723 / 4724 (99.98%)
+===============================================================
+Finished
+===============================================================
+```
+One subdomain seem interesting : /robots.txt.
+
+When we go on it, we find another nice clue.
+
+<details>
+    <summary>Clue 2</summary>
+  
+```
+Wubbalubbadubdub
+```
+
+</details>
+
+Maybe that could be enough for SSH now ?
+
+### SSH (Port 22)
+Let's try to connect with what we have : `ssh R1ckRul3s@10.10.124.198`.
+
+```bash
+ssh R1ckRul3s@10.10.124.198
+The authenticity of host '10.10.124.198 (10.10.124.198)' can't be established.
+ED25519 key fingerprint is SHA256:J71A6K+htxkobaUA0zeEtVVLlajw9L9dY7+1xi8cdII.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '10.10.124.198' (ED25519) to the list of known hosts.
+R1ckRul3s@10.10.124.198: Permission denied (publickey).
+```
+
+Ok, nice try...
+
+
+
 
 
 
