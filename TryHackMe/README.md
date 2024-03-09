@@ -1,3 +1,3 @@
 # TryHackMe
 
-- [Pickle Rick](Picke_Rick/README.md)
+- [Pickle Rick](Pickle_Rick/README.md)
